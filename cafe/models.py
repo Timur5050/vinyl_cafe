@@ -37,7 +37,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    product = models.ManyToManyField(Product, related_name="orders")
+    products = models.ManyToManyField(Product, related_name="orders")
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now_add=True)
 
