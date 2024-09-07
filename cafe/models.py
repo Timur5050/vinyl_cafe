@@ -2,6 +2,7 @@ import os
 import uuid
 
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -39,3 +40,12 @@ class Order(models.Model):
     product = models.ManyToManyField(Product, related_name="orders")
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now_add=True)
+
+
+class FeedBack(models.Model):
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    start = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    time = models.DateTimeField(auto_now_add=True)
+
