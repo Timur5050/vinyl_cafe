@@ -38,4 +38,34 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-objects = UserManager()
+class User(AbstractUser):
+    username = None
+    email = models.EmailField(_("email address"), unique=True)
+    phone_number = models.CharField(_("phone number"), max_length=20, blank=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = UserManager()
+
+    def clean(self):
+        if self.phone_number:
+            if not self.phone_number.startswith("+380"):
+                raise ValidationError(_("Phone number must start with +380"))
+
+            if not self.phone_number[4:].isnumeric():
+                raise ValidationError(_("Phone number must contain only digits after +380"))
+        else:
+            raise ValidationError(_("Phone number cannot be empty"))
+
+    def save(
+            self,
+            force_insert=False,
+            force_update=False,
+            using=None,
+            update_fields=None,
+    ):
+        self.full_clean()
+        return super(User, self).save(
+            force_insert, force_update, using, update_fields
+        )
