@@ -55,6 +55,9 @@ class User(AbstractUser):
 
             if not self.phone_number[4:].isnumeric():
                 raise ValidationError(_("Phone number must contain only digits after +380"))
+
+            if not len(self.phone_number) == 13:
+                raise ValidationError(_("Phone number length is 10 and dont forget to put +380 at the beginning"))
         else:
             raise ValidationError(_("Phone number cannot be empty"))
 
