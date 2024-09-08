@@ -40,6 +40,8 @@ class Order(models.Model):
     products = models.ManyToManyField(Product, related_name="orders")
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now_add=True)
+    additional_information = models.TextField(blank=True, null=True)
+    takeaway = models.BooleanField(default=False)
 
 
 class FeedBack(models.Model):
@@ -48,4 +50,3 @@ class FeedBack(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     start = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     time = models.DateTimeField(auto_now_add=True)
-
