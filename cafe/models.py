@@ -48,5 +48,5 @@ class FeedBack(models.Model):
     title = models.CharField(max_length=100)
     text = models.TextField()
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    start = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     time = models.DateTimeField(auto_now_add=True)
