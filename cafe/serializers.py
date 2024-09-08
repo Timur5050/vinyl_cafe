@@ -41,11 +41,12 @@ class ProductForOrderSerializer(serializers.ModelSerializer):
 class OrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ("products",)
+        fields = ("products", "additional_information", "takeaway")
 
     def create(self, validated_data):
-        order = Order.objects.create(user=self.context["request"].user)
-        order.product.set(validated_data["products"])
+        products = validated_data.pop("products")
+        order = Order.objects.create(**validated_data, user=self.context["request"].user)
+        order.products.set(products)
         order.save()
         return order
 
@@ -55,4 +56,4 @@ class OrderListRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ("products", "time")
+        fields = ("products", "additional_information", "takeaway", "time")
