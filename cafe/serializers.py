@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from cafe.models import Product, Order
+from cafe.models import Product, Order, FeedBack
 
 
 class ProductListSerializer(serializers.ModelSerializer):
@@ -57,3 +57,15 @@ class OrderListRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ("products", "additional_information", "takeaway", "time")
+
+
+class FeedBackListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedBack
+        fields = ("id", "title", "text", "user", "stars", "time")
+
+
+class FeedBackCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedBack
+        fields = ("title", "text", "stars")
