@@ -69,3 +69,7 @@ class FeedBackCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeedBack
         fields = ("title", "text", "stars")
+
+    def create(self, validated_data):
+        feedback = FeedBack.objects.create(**validated_data, user=self.context["request"].user)
+        return feedback
