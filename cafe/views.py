@@ -13,6 +13,7 @@ from cafe.serializers import (
     FeedBackListSerializer,
     FeedBackCreateSerializer
 )
+from cafe.email_messages import send_mail
 
 
 class ProductView(ModelViewSet):
@@ -49,6 +50,14 @@ class OrderView(ListCreateAPIView):
     def get_queryset(self):
         queryset = Order.objects.filter(user=self.request.user)
         return queryset
+
+    def post(self, request, *args, **kwargs):
+        products_ids = [int(i) for i in request.data.getlist("products")]
+        products = Product.objects.filter(id__in=products_ids)
+        product_names = [product.title for product in products]
+        message = f"Your order contains the following products: {', '.join(product_names)}"
+        send_mail(self.request.user.email, message, request.data["takeaway"])
+        return self.create(request, *args, **kwargs)
 
 
 class FeedBackView(GenericAPIView,
